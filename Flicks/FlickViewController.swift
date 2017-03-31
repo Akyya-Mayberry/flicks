@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AFNetworking
 
 class FlickViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     
@@ -70,13 +71,19 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // Cell specs
         let movie_title = movies[indexPath.row]["original_title"] as! String
-        cell.titleLabel.text = "\(movie_title)"
+        let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
+        let posterImgPath = movies[indexPath.row]["poster_path"] as! String
+        let posterUrl = URL(string: posterBaseUrl + posterImgPath)
+        let overviewLabel = movies[indexPath.row]["overview"] as! String
+        
+        cell.titleLabel.text = movie_title
+        cell.overviewLabel.text = overviewLabel
+        cell.posterImageView.setImageWith(posterUrl!)
         
         return cell
     }
 
     //Mark: TODOs
     /* Safety checks for API calls */
-    /* Update cell specs */
     /* Create details view */
 }

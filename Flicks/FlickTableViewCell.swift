@@ -13,6 +13,7 @@ class FlickTableViewCell: UITableViewCell {
     //Mark: Properties
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
+    @IBOutlet weak var overviewLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
