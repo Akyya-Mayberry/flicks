@@ -11,8 +11,10 @@ import UIKit
 class DetailsViewController: UIViewController {
     // MARK: Properties
     @IBOutlet weak var titleLabel: UILabel!
+
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var posterView: UIImageView!
+    @IBOutlet weak var descriptionScrollView: UIScrollView!
     public var movie: FlickTableViewCell!
     public var posterUrl: URL!
     
@@ -22,6 +24,11 @@ class DetailsViewController: UIViewController {
         titleLabel.text = movie.titleLabel.text
         posterView.setImageWith(posterUrl)
         descriptionLabel.text = movie.overviewLabel.text
+        descriptionLabel.sizeToFit()
+        
+        // Scroll
+        descriptionScrollView.contentSize = descriptionLabel.bounds.size
+
     }
 
     override func didReceiveMemoryWarning() {
