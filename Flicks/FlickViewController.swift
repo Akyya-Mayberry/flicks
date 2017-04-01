@@ -16,6 +16,8 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     var movies: [NSDictionary] = []
     var refreshControl = UIRefreshControl()
+    @IBOutlet weak var errorsView: UIView!
+    @IBOutlet weak var errorDescriptionLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,12 +25,10 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         // allow table view to be fed data and controlled by this view controller
         tableView.dataSource = self
         tableView.delegate = self
-        
-        // MARK: Refresh data
-        refreshControl.addTarget(self, action: #selector(FlickViewController.refreshMovieData), for: UIControlEvents.valueChanged)
-        tableView.addSubview(refreshControl)
-        
+
         // MARK: Network Request
+        
+        // Original API data
         let url = URL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")
         let request = URLRequest(url: url!)
         let session = URLSession(
@@ -38,30 +38,48 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         )
         
         MBProgressHUD.showAdded(to: self.view, animated: true)
-        
         let task : URLSessionDataTask = session.dataTask(
             with: request as URLRequest,
             completionHandler: { (data, response, error) in
                 
                 MBProgressHUD.hide(for: self.view, animated: true)
                 
+                // Handle any inital errors
+                self.errorsView.isHidden = true
+                
+                if let errorMessage = error?.localizedDescription {
+                    self.errorDescriptionLabel.text = errorMessage
+                    self.errorsView.isHidden = false
+                    return
+                }
+                
+                // Process JSON response
                 if let data = data {
                     if let responseDictionary = try! JSONSerialization.jsonObject(
                         with: data, options:[]) as? NSDictionary {
                         //print("responseDictionary: \(responseDictionary)")
-                        
+                    
                         // The data of interest is stored in the 'results' key.
                         // It will be the movies.
                         let responseFieldDictionary = responseDictionary["results"] as! [NSDictionary]
-                        
+                    
                         self.movies = responseFieldDictionary
-                        
+                    
                         // update table view with return network data
                         self.tableView.reloadData()
                     }
+                } else {
+                    // No data returned from response
+                    self.errorDescriptionLabel.text = error?.localizedDescription
+                    self.errorsView.isHidden = false
+                    return
                 }
         });
         task.resume()
+        
+        // Refresh API data
+        refreshControl.addTarget(self, action: #selector(FlickViewController.refreshMovieData), for: UIControlEvents.valueChanged)
+        tableView.addSubview(refreshControl)
     }
     
     // Retrieve updated movie data and refresh table
@@ -166,4 +184,5 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     // MARK: TODO'S
     /* Safety checks for API calls */
+//    in the network request, if you don't get a response dictionary back, you can assume there was an error. You can also check the error parameter. Hide or show the network error view depending on what happened.
 }
