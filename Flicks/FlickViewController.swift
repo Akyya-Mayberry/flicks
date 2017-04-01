@@ -8,12 +8,14 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 class FlickViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     
     // MARK: Properties
     @IBOutlet weak var tableView: UITableView!
     var movies: [NSDictionary] = []
+    var refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +23,10 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         // allow table view to be fed data and controlled by this view controller
         tableView.dataSource = self
         tableView.delegate = self
+        
+        // MARK: Refresh data
+        refreshControl.addTarget(self, action: #selector(FlickViewController.refreshMovieData), for: UIControlEvents.valueChanged)
+        tableView.addSubview(refreshControl)
         
         // MARK: Network Request
         let url = URL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")
@@ -31,9 +37,14 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
             delegateQueue:OperationQueue.main
         )
         
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        
         let task : URLSessionDataTask = session.dataTask(
             with: request as URLRequest,
             completionHandler: { (data, response, error) in
+                
+                MBProgressHUD.hide(for: self.view, animated: true)
+                
                 if let data = data {
                     if let responseDictionary = try! JSONSerialization.jsonObject(
                         with: data, options:[]) as? NSDictionary {
@@ -47,6 +58,44 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
                         
                         // update table view with return network data
                         self.tableView.reloadData()
+                    }
+                }
+        });
+        task.resume()
+    }
+    
+    // Retrieve updated movie data and refresh table
+    func refreshMovieData() {
+        let url = URL(string:"https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")
+        let request = URLRequest(url: url!)
+        let session = URLSession(
+            configuration: URLSessionConfiguration.default,
+            delegate:nil,
+            delegateQueue:OperationQueue.main
+        )
+        
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        
+        let task : URLSessionDataTask = session.dataTask(
+            with: request as URLRequest,
+            completionHandler: { (data, response, error) in
+                
+                MBProgressHUD.hide(for: self.view, animated: true)
+                
+                if let data = data {
+                    if let responseDictionary = try! JSONSerialization.jsonObject(
+                        with: data, options:[]) as? NSDictionary {
+                        //print("responseDictionary: \(responseDictionary)")
+                        
+                        // The data of interest is stored in the 'results' key.
+                        // It will be the movies.
+                        let responseFieldDictionary = responseDictionary["results"] as! [NSDictionary]
+                        
+                        self.movies = responseFieldDictionary
+                        
+                        // update table view with return network data
+                        self.tableView.reloadData()
+                        self.refreshControl.endRefreshing()
                     }
                 }
         });
