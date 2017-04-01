@@ -114,20 +114,28 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
     // 2 of 2 required method by UITableViewDataSource Protocol
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // Flick cell is a resuable custom cell that will display movie specs
+        // Flick cell is a resuable custom cell that will display individual movie specs
         let cell = tableView.dequeueReusableCell(withIdentifier: "FlickCell") as! FlickTableViewCell
+        let movie = movies[indexPath.row]
         
+        // Prep cell/movie specs
+        let movie_title = movie["original_title"] as! String
+        let overviewLabel = movie["overview"] as! String
         
-        // Cell specs
-        let movie_title = movies[indexPath.row]["original_title"] as! String
-        let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
-        let posterImgPath = movies[indexPath.row]["poster_path"] as! String
-        let posterUrl = URL(string: posterBaseUrl + posterImgPath)
-        let overviewLabel = movies[indexPath.row]["overview"] as! String
+        // Special check for poster image spec as one may not exist
+        if let posterImgPath = movie["poster_path"] as? String {
+            let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
+            let posterUrl = URL(string: posterBaseUrl + posterImgPath)
+            cell.posterImageView.setImageWith(posterUrl!)
+        }
+        else {
+            // Absent poster image
+            cell.posterImageView.image = nil
+        }
         
+        // Set remaining cell specs
         cell.titleLabel.text = movie_title
         cell.overviewLabel.text = overviewLabel
-        cell.posterImageView.setImageWith(posterUrl!)
         
         return cell
     }
@@ -141,13 +149,19 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Prep data to be sent to details view
         let sender = sender as! FlickTableViewCell
         let indexPath = tableView.indexPath(for: sender)! // index path is [Col, Row]
-        let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
-        let posterImgPath = movies[indexPath.row]["poster_path"] as! String
-        let posterUrl = URL(string: posterBaseUrl + posterImgPath)
+        let movie = movies[indexPath.row]
         
-        // Set details view properties
-        detailsVC.movie = sender
-        detailsVC.posterUrl = posterUrl
+        // Special check for poster image spec as one may not exist
+        if let posterImgPath = movie["poster_path"] as? String {
+            let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
+            detailsVC.posterUrl = URL(string: posterBaseUrl + posterImgPath)
+        } else {
+            detailsVC.posterUrl = nil
+        }
+        
+        // Set remaining details view properties
+        detailsVC.movieCell = sender
+        detailsVC.movie = movie
     }
 
     // MARK: TODO'S

@@ -16,16 +16,23 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var descriptionScrollView: UIScrollView!
     @IBOutlet weak var detailsScrollView: UIScrollView!
     @IBOutlet weak var infoView: UIView!
-    public var movie: FlickTableViewCell!
-    public var posterUrl: URL!
+    public var movieCell: FlickTableViewCell!
+    public var movie: NSDictionary = [:]
+    public var posterUrl: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        titleLabel.text = movie.titleLabel.text
-        posterView.setImageWith(posterUrl)
-        descriptionLabel.text = movie.overviewLabel.text
+        titleLabel.text = movieCell.titleLabel.text
+        descriptionLabel.text = movieCell.overviewLabel.text
         descriptionLabel.sizeToFit()
+        
+        // Special check for poster image spec as one may not exist
+        if let posterUrl = posterUrl {
+            posterView.setImageWith(posterUrl)
+        } else {
+            posterView.image = nil
+        }
         
         // Scroll
         // Content width same as scroll view frame,
@@ -48,8 +55,4 @@ class DetailsViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    
-    // MARK: TODO'S
-    /* Make overview/description view scrollable */
-
 }
