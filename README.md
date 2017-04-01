@@ -2,7 +2,7 @@
 
 **Flicks** is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: **1.5** hours spent in total
+Time spent: **3** hours spent in total
 
 ## User Stories
 
@@ -10,9 +10,9 @@ The following **required** functionality is completed:
 
 - [X] User can view a list of movies currently playing in theaters. Poster images load asynchronously.
 - [X] User can view movie details by tapping on a cell.
-- [ ] User sees loading state while waiting for the API.
+- [X] User sees loading state while waiting for the API.
 - [ ] User sees an error message when there is a network error.
-- [ ] User can pull to refresh the movie list.
+- [X] User can pull to refresh the movie list.
 
 The following **optional** features are implemented:
 
@@ -39,6 +39,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Notes
 
 Describe any challenges encountered while building the app.
+Getting the refresh control to work without compiler errors. I was declaring the refreshControl, the function and everything inside the viewDidLoad() which was a problematic. I found a nice YouTube tutorial that help me work through it quickly.
 
 ## License
 
