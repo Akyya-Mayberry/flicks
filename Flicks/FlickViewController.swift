@@ -16,7 +16,7 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     var movies: [NSDictionary] = []
     var refreshControl = UIRefreshControl()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -128,6 +128,7 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.titleLabel.text = movie_title
         cell.overviewLabel.text = overviewLabel
         cell.posterImageView.setImageWith(posterUrl!)
+        cell.selectedBackgroundView = cell.cellBackgroundView
         
         return cell
     }

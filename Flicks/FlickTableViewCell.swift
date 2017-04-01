@@ -14,7 +14,8 @@ class FlickTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var overviewLabel: UILabel!
-
+    let cellBackgroundView = UIView()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -24,6 +25,10 @@ class FlickTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+        super.setSelected(selected, animated: animated)
+        
+        // sets the background color of a selected cell
+        cellBackgroundView.backgroundColor = UIColor(red: 49.0/255, green: 48.0/255, blue: 107.0/255, alpha: 0.4)
     }
 
 }
