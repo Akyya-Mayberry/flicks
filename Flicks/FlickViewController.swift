@@ -144,9 +144,24 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         if let posterImgPath = movie["poster_path"] as? String {
             let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = URL(string: posterBaseUrl + posterImgPath)
-            cell.posterImageView.setImageWith(posterUrl!)
-        }
-        else {
+            
+            let imgRequest = URLRequest(url: posterUrl!)
+            
+            // Set the movie's poster image
+            cell.posterImageView.setImageWith(imgRequest, placeholderImage: nil, success: { (imgRequest, imgResponse, img) in
+                
+                if imgResponse != nil {
+                    cell.posterImageView.alpha = 0.0
+                    cell.posterImageView.image = img
+                    UIView.animate(withDuration: 3.0, animations: {
+                        cell.posterImageView.alpha = 1.0
+                    })
+                }
+            }, failure: { (imgRequest, imgResponse, error) in
+                cell.posterImageView.image = nil
+            })
+        
+        } else {
             // Absent poster image
             cell.posterImageView.image = nil
         }
