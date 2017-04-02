@@ -156,6 +156,12 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
                     UIView.animate(withDuration: 3.0, animations: {
                         cell.posterImageView.alpha = 1.0
                     })
+                    
+                    // Set remaining cell specs
+                    cell.titleLabel.text = movie_title
+                    cell.overviewLabel.text = overviewLabel
+                    cell.posterImageView.setImageWith(posterUrl!)
+                    cell.selectedBackgroundView = cell.cellBackgroundView
                 }
             }, failure: { (imgRequest, imgResponse, error) in
                 cell.posterImageView.image = nil
@@ -166,11 +172,7 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
             cell.posterImageView.image = nil
         }
         
-        // Set remaining cell specs
-        cell.titleLabel.text = movie_title
-        cell.overviewLabel.text = overviewLabel
-        cell.posterImageView.setImageWith(posterUrl!)
-        cell.selectedBackgroundView = cell.cellBackgroundView
+
         
         return cell
     }
