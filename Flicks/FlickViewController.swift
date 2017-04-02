@@ -18,7 +18,7 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
     var refreshControl = UIRefreshControl()
     @IBOutlet weak var errorsView: UIView!
     @IBOutlet weak var errorDescriptionLabel: UILabel!
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -169,6 +169,8 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Set remaining cell specs
         cell.titleLabel.text = movie_title
         cell.overviewLabel.text = overviewLabel
+        cell.posterImageView.setImageWith(posterUrl!)
+        cell.selectedBackgroundView = cell.cellBackgroundView
         
         return cell
     }
