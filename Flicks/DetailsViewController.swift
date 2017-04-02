@@ -23,8 +23,8 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        titleLabel.text = movieCell.titleLabel.text
-        descriptionLabel.text = movieCell.overviewLabel.text
+        titleLabel.text = movie["original_title"] as? String
+        descriptionLabel.text = movie["overview"] as? String
         descriptionLabel.sizeToFit()
         
         // Special check for poster image spec as one may not exist
