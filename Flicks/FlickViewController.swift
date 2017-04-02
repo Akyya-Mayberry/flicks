@@ -14,10 +14,12 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     // MARK: Properties
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var errorsView: UIView!
+    @IBOutlet weak var displayTypeControl: UISegmentedControl!
+    @IBOutlet weak var errorDescriptionLabel: UILabel!
     var movies: [NSDictionary] = []
     var refreshControl = UIRefreshControl()
-    @IBOutlet weak var errorsView: UIView!
-    @IBOutlet weak var errorDescriptionLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +66,24 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
                         let responseFieldDictionary = responseDictionary["results"] as! [NSDictionary]
                     
                         self.movies = responseFieldDictionary
-                    
+                        
+                        
+                        
+                        
+                        
+                        if self.displayTypeControl.selectedSegmentIndex == 0 {
+                            self.tableView.isHidden = false
+                            self.collectionView.isHidden = true
+                        } else {
+                            self.tableView.isHidden = true
+                            self.collectionView.isHidden = false
+                        }
+                            
+                            
+                            
+                            
+                            
+                            
                         // update table view with return network data
                         self.tableView.reloadData()
                     }
@@ -173,6 +192,18 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         return cell
     }
     
+    // Toggle list of movies display mode
+    @IBAction func changeDisplayTypeControl(_ sender: UISegmentedControl) {
+        if displayTypeControl.selectedSegmentIndex == 0 {
+            tableView.isHidden = false
+            collectionView.isHidden = true
+        } else {
+            tableView.isHidden = true
+            collectionView.isHidden = false
+        }
+        
+    }
+    
     // MARK: Segue to details view controller
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -196,6 +227,9 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         detailsVC.movieCell = sender
         detailsVC.movie = movie
     }
+    
+    
+
 
     // MARK: TODO'S
     /* Safety checks for API calls */
