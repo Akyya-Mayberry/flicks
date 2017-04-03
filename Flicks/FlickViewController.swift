@@ -18,9 +18,12 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var errorDescriptionLabel: UILabel!
     @IBOutlet weak var displayCellStyleControl: UISegmentedControl!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var flicksCollectionFlowLayout: UICollectionViewFlowLayout!
+    
     var movies: [NSDictionary] = []
     var refreshControl = UIRefreshControl()
     
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,14 +61,21 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
             ], for: UIControlState.normal
         )
         
-        
-        // Cell Items
         tableView.backgroundColor = UIColor(red: 49.0/255, green: 48.0/255, blue: 107.0/255, alpha: 0.4)
-        let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top:1,left:5,bottom:5,right:5)
-        layout.minimumInteritemSpacing = 1
-        layout.minimumLineSpacing = 5
-        collectionView.collectionViewLayout = layout
+        collectionView.backgroundColor = UIColor.black
+
+        
+        // Making and instance of UICollectionViewFlowLayout
+        // vs creating an outlet from storyboard
+//        let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+//        layout.sectionInset = UIEdgeInsets(top:1,left:5,bottom:5,right:5)
+//        layout.minimumInteritemSpacing = 1
+//        layout.minimumLineSpacing = 5
+//        collectionView.collectionViewLayout = layout
+        flicksCollectionFlowLayout.minimumInteritemSpacing = 20
+        flicksCollectionFlowLayout.minimumLineSpacing = 8
+        flicksCollectionFlowLayout.sectionInset = UIEdgeInsets(top:1,left:5,bottom:5,right:5)
+        
         
         // MARK: Network Request
         
@@ -193,7 +203,7 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
             let posterUrl = URL(string: posterBaseUrl + posterImgPath)
 
             cell.posterImageView.alpha = 0.0
-            UIView.animate(withDuration: 1.5, animations: {
+            UIView.animate(withDuration: 3.0, animations: {
                 cell.posterImageView.alpha = 1.0
             })
             cell.posterImageView.setImageWith(posterUrl!)
@@ -201,7 +211,8 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.titleLabel.text = movie_title
         cell.overviewLabel.text = overviewLabel
         cell.selectedBackgroundView = cell.cellBackgroundView
-        
+        cell.backgroundColor = UIColor(red: 49.0/255, green: 48.0/255, blue: 107.0/255, alpha: 0.4)
+        cell.separatorInset.top = 10
         return cell
     }
     
@@ -225,7 +236,7 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
             let posterUrl = URL(string: posterBaseUrl + posterImgPath)
 
             cell.posterImageView.alpha = 0.0
-            UIView.animate(withDuration: 1.5, animations: {
+            UIView.animate(withDuration: 3.0, animations: {
                 cell.posterImageView.alpha = 1.0
             })
             
@@ -246,8 +257,21 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: 100  , height: 100)
         
+        
+        
+        let totalSpace = flicksCollectionFlowLayout.sectionInset.left
+            + flicksCollectionFlowLayout.sectionInset.right
+            + (flicksCollectionFlowLayout.minimumInteritemSpacing * CGFloat(3 - 1))
+        let size = Int((collectionView.bounds.width - totalSpace) / CGFloat(3))
+        
+        return CGSize(width: size, height: size)
+//        return CGSize(width: 150  , height: 130)
+        
+    }
+    
+    func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+        return []
     }
 
     // Toggles movies display from list view to thumbnail view

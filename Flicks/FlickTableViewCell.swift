@@ -14,13 +14,16 @@ class FlickTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var overviewLabel: UILabel!
-    let cellBackgroundView = UIView()
+    let cellBackgroundView = UIView() // Will override the default background
+    var cellSeparatorInset = UIEdgeInsets(top:1,left:5,bottom:5,right:5)
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
+    // The default backgroundView view sets selected cell to grey
+    // Here it's customized using the custom cellBackgroundView view
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
@@ -30,5 +33,5 @@ class FlickTableViewCell: UITableViewCell {
         // sets the background color of a selected cell
         cellBackgroundView.backgroundColor = UIColor(red: 49.0/255, green: 48.0/255, blue: 107.0/255, alpha: 0.4)
     }
-
+    
 }
