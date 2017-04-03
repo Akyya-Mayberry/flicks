@@ -10,22 +10,21 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class FlickViewController: UIViewController, UITableViewDataSource, UITableViewDelegate , UICollectionViewDataSource, UICollectionViewDelegate {
+class FlickViewController: UIViewController, UITableViewDataSource, UITableViewDelegate , UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
     
     // MARK: Properties
     @IBOutlet weak var tableView: UITableView!
-    var movies: [NSDictionary] = []
-    var refreshControl = UIRefreshControl()
     @IBOutlet weak var errorsView: UIView!
     @IBOutlet weak var errorDescriptionLabel: UILabel!
     @IBOutlet weak var displayCellStyleControl: UISegmentedControl!
-  
     @IBOutlet weak var collectionView: UICollectionView!
+    var movies: [NSDictionary] = []
+    var refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // allow table view to be fed data and controlled by this view controller
+        // Allow table/collection views to be fed data and controlled by this view controller
         tableView.dataSource = self
         tableView.delegate = self
         collectionView.dataSource = self
@@ -39,6 +38,34 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
             tableView.isHidden = true
             collectionView.isHidden = false
         }
+        
+        // Custom styles
+        if let navigationBar = navigationController?.navigationBar {
+            navigationBar.backgroundColor = UIColor(red: 49.0/255, green: 48.0/255, blue: 107.0/255, alpha: 1.0)
+            navigationBar.titleTextAttributes = [
+                NSFontAttributeName : UIFont.boldSystemFont(ofSize: 22),
+                NSForegroundColorAttributeName : UIColor.white,
+            ]
+        }
+        
+        // Navagation Items
+        displayCellStyleControl.sizeToFit()
+        displayCellStyleControl.tintColor = UIColor(red: 49.0/255, green: 48.0/255, blue: 107.0/255, alpha: 0.4)
+        displayCellStyleControl.backgroundColor = UIColor(red: 49.0/255, green: 48.0/255, blue: 107.0/255, alpha: 0.4)
+        displayCellStyleControl.setTitleTextAttributes([
+            NSFontAttributeName : UIFont.boldSystemFont(ofSize: 22),
+            NSForegroundColorAttributeName : UIColor.white,
+            ], for: UIControlState.normal
+        )
+        
+        
+        // Cell Items
+        tableView.backgroundColor = UIColor(red: 49.0/255, green: 48.0/255, blue: 107.0/255, alpha: 0.4)
+        let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top:1,left:5,bottom:5,right:5)
+        layout.minimumInteritemSpacing = 1
+        layout.minimumLineSpacing = 5
+        collectionView.collectionViewLayout = layout
         
         // MARK: Network Request
         
@@ -164,37 +191,18 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         if let posterImgPath = movie["poster_path"] as? String {
             let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = URL(string: posterBaseUrl + posterImgPath)
-            
-            let imgRequest = URLRequest(url: posterUrl!)
-            
-            // Set the movie's poster image
-            cell.posterImageView.setImageWith(imgRequest, placeholderImage: nil, success: { (imgRequest, imgResponse, img) in
-                
-                if imgResponse != nil {
-                    cell.posterImageView.alpha = 0.0
-                    cell.posterImageView.image = img
-                    UIView.animate(withDuration: 3.0, animations: {
-                        cell.posterImageView.alpha = 1.0
-                    })
-                    
-                    // Set remaining cell specs
-                    cell.titleLabel.text = movie_title
-                    cell.overviewLabel.text = overviewLabel
-                    cell.posterImageView.setImageWith(posterUrl!)
-                    cell.selectedBackgroundView = cell.cellBackgroundView
-                }
-            }, failure: { (imgRequest, imgResponse, error) in
-                cell.posterImageView.image = nil
+
+            cell.posterImageView.alpha = 0.0
+            UIView.animate(withDuration: 3.0, animations: {
+                cell.posterImageView.alpha = 1.0
             })
-        
-        } else {
-            // Absent poster image
-            cell.posterImageView.image = nil
+            cell.posterImageView.setImageWith(posterUrl!)
         }
+        cell.titleLabel.text = movie_title
+        cell.overviewLabel.text = overviewLabel
         
         return cell
     }
-    
     
     
     // MARK: Collection view protocol requirements
@@ -214,34 +222,31 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         if let posterImgPath = movie["poster_path"] as? String {
             let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = URL(string: posterBaseUrl + posterImgPath)
-            
-            let imgRequest = URLRequest(url: posterUrl!)
-            
-            // Set the movie's poster image
-            cell.posterImageView.setImageWith(imgRequest, placeholderImage: nil, success: { (imgRequest, imgResponse, img) in
-                
-                if imgResponse != nil {
-                    cell.posterImageView.alpha = 0.0
-                    cell.posterImageView.image = img
-                    UIView.animate(withDuration: 3.0, animations: {
-                        cell.posterImageView.alpha = 1.0
-                    })
-                    
-                    // Set remaining cell specs
-                    cell.posterImageView.setImageWith(posterUrl!)
-//                    cell.selectedBackgroundView = cell.cellBackgroundView
-                }
-            }, failure: { (imgRequest, imgResponse, error) in
-                cell.posterImageView.image = nil
+
+            cell.posterImageView.alpha = 0.0
+            UIView.animate(withDuration: 3.0, animations: {
+                cell.posterImageView.alpha = 1.0
             })
             
-        } else {
-            // Absent poster image
-            cell.posterImageView.image = nil
+            cell.posterImageView.setImageWith(posterUrl!)
         }
         
+        let bcolor : UIColor = UIColor( red: 0.2, green: 0.2, blue:0.2, alpha: 0.3 )
+        cell.layer.borderColor = bcolor.cgColor
+        cell.layer.borderWidth = 0.1
+        cell.layer.cornerRadius = 3
+        cell.backgroundColor = UIColor.black
         
         return cell
+    }
+    
+    // Required to override cell size settings
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        return CGSize(width: 100  , height: 100)
+        
     }
 
     // Toggles movies display from list view to thumbnail view
@@ -249,11 +254,13 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         if displayCellStyleControl.selectedSegmentIndex == 0 {
             tableView.isHidden = false
             collectionView.isHidden = true
-            tableView.reloadData()
+            self.tableView.reloadData()
+            
         } else {
             tableView.isHidden = true
             collectionView.isHidden = false
-            collectionView.reloadData()
+            self.collectionView.reloadData()
+            
         }
     }
 
@@ -267,7 +274,6 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Prep data to be sent to details view
         // MARK: DISPLAY4 IDENTIFY SEGUE
         
-//        var indexPath: AnyObject
         if displayCellStyleControl.selectedSegmentIndex == 0 {
             let indexPath = tableView.indexPath(for: sender as! UITableViewCell)!
             let movie = movies[indexPath.row]
@@ -298,6 +304,4 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     // MARK: TODO'S
-    /* Safety checks for API calls */
-//    in the network request, if you don't get a response dictionary back, you can assume there was an error. You can also check the error parameter. Hide or show the network error view depending on what happened.
 }

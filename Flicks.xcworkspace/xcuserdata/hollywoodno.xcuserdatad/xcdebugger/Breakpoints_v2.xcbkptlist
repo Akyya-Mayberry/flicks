@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Flicks/FlickViewController.swift"
-            timestampString = "512878341.803088"
+            timestampString = "512886899.214055"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "269"
-            endingLineNumber = "269"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
             landmarkName = "prepare(for:sender:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -130,6 +130,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="overviewLabel" destination="OzS-D7-7qZ" id="x8L-xz-YBH"/>
@@ -182,13 +183,13 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" title="Flicks" id="QAY-yN-23F">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="YA6-K6-eex">
+                        <barButtonItem key="leftBarButtonItem" title="Toggle List/Grid View" id="YA6-K6-eex">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="sT3-8X-b7u">
                                 <rect key="frame" x="16" y="8" width="47" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <segments>
                                     <segment title="L"/>
-                                    <segment title="T"/>
+                                    <segment title="G"/>
                                 </segments>
                                 <connections>
                                     <action selector="changeDisplayCellType:" destination="BYZ-38-t0r" eventType="valueChanged" id="bcv-BU-2rz"/>
