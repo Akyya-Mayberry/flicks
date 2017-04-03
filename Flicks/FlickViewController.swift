@@ -10,7 +10,7 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class FlickViewController: UIViewController, UITableViewDataSource, UITableViewDelegate  {
+class FlickViewController: UIViewController, UITableViewDataSource, UITableViewDelegate , UICollectionViewDataSource, UICollectionViewDelegate {
     
     // MARK: Properties
     @IBOutlet weak var tableView: UITableView!
@@ -18,14 +18,28 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
     var refreshControl = UIRefreshControl()
     @IBOutlet weak var errorsView: UIView!
     @IBOutlet weak var errorDescriptionLabel: UILabel!
+    @IBOutlet weak var displayCellStyleControl: UISegmentedControl!
   
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // allow table view to be fed data and controlled by this view controller
         tableView.dataSource = self
         tableView.delegate = self
-
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        
+        // MARK: DIPLAY0 WHICH VIEW TO DISPLAY TABLE OR COLLECTION
+        if displayCellStyleControl.selectedSegmentIndex == 0 {
+            tableView.isHidden = false
+            collectionView.isHidden = true
+        } else {
+            tableView.isHidden = true
+            collectionView.isHidden = false
+        }
+        
         // MARK: Network Request
         
         // Original API data
@@ -66,7 +80,9 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
                         self.movies = responseFieldDictionary
                     
                         // update table view with return network data
+                        // MARK: DISPLAY1 RELOAD DATA
                         self.tableView.reloadData()
+                        self.collectionView.reloadData()
                     }
                 } else {
                     // No data returned from response
@@ -79,7 +95,9 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         // Refresh API data
         refreshControl.addTarget(self, action: #selector(FlickViewController.refreshMovieData), for: UIControlEvents.valueChanged)
+        // MARK: DISPLAY2 SUBVIEW
         tableView.addSubview(refreshControl)
+        collectionView.addSubview(refreshControl)
     }
     
     // Retrieve updated movie data and refresh table
@@ -111,8 +129,10 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
                         
                         self.movies = responseFieldDictionary
                         
+                        // MARK: DISPLAY3 REFRESH DATA
                         // update table view with return network data
                         self.tableView.reloadData()
+                        self.collectionView.reloadData()
                         self.refreshControl.endRefreshing()
                     }
                 }
@@ -172,33 +192,109 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
             cell.posterImageView.image = nil
         }
         
-
-        
         return cell
     }
     
-    // MARK: Segue to details view controller
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+    
+    // MARK: Collection view protocol requirements
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movies.count
+    }
+    
+    
+    // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        // Reference to details view
-        let detailsVC = segue.destination as! DetailsViewController
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FlickCollectionCell", for: indexPath) as! FlickCollectionViewCell
 
-        // Prep data to be sent to details view
-        let sender = sender as! FlickTableViewCell
-        let indexPath = tableView.indexPath(for: sender)! // index path is [Col, Row]
         let movie = movies[indexPath.row]
         
         // Special check for poster image spec as one may not exist
         if let posterImgPath = movie["poster_path"] as? String {
             let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
-            detailsVC.posterUrl = URL(string: posterBaseUrl + posterImgPath)
+            let posterUrl = URL(string: posterBaseUrl + posterImgPath)
+            
+            let imgRequest = URLRequest(url: posterUrl!)
+            
+            // Set the movie's poster image
+            cell.posterImageView.setImageWith(imgRequest, placeholderImage: nil, success: { (imgRequest, imgResponse, img) in
+                
+                if imgResponse != nil {
+                    cell.posterImageView.alpha = 0.0
+                    cell.posterImageView.image = img
+                    UIView.animate(withDuration: 3.0, animations: {
+                        cell.posterImageView.alpha = 1.0
+                    })
+                    
+                    // Set remaining cell specs
+                    cell.posterImageView.setImageWith(posterUrl!)
+//                    cell.selectedBackgroundView = cell.cellBackgroundView
+                }
+            }, failure: { (imgRequest, imgResponse, error) in
+                cell.posterImageView.image = nil
+            })
+            
         } else {
-            detailsVC.posterUrl = nil
+            // Absent poster image
+            cell.posterImageView.image = nil
         }
         
-        // Set remaining details view properties
-        detailsVC.movieCell = sender
-        detailsVC.movie = movie
+        
+        return cell
+    }
+
+    // Toggles movies display from list view to thumbnail view
+    @IBAction func changeDisplayCellType(_ sender: Any) {
+        if displayCellStyleControl.selectedSegmentIndex == 0 {
+            tableView.isHidden = false
+            collectionView.isHidden = true
+            tableView.reloadData()
+        } else {
+            tableView.isHidden = true
+            collectionView.isHidden = false
+            collectionView.reloadData()
+        }
+    }
+
+
+    // MARK: Segue to details view controller
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // Reference to details view
+        let detailsVC = segue.destination as! DetailsViewController
+        
+        // Prep data to be sent to details view
+        // MARK: DISPLAY4 IDENTIFY SEGUE
+        
+//        var indexPath: AnyObject
+        if displayCellStyleControl.selectedSegmentIndex == 0 {
+            let indexPath = tableView.indexPath(for: sender as! UITableViewCell)!
+            let movie = movies[indexPath.row]
+            
+            // Special check for poster image spec as one may not exist
+            if let posterImgPath = movie["poster_path"] as? String {
+                let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
+                detailsVC.posterUrl = URL(string: posterBaseUrl + posterImgPath)
+            } else {
+                detailsVC.posterUrl = nil
+            }
+            
+            detailsVC.movie = movie
+        } else {
+            let indexPath = collectionView.indexPath(for: sender as! UICollectionViewCell)! // index path is [Col, Row]
+            let movie = movies[indexPath.row]
+            
+            // Special check for poster image spec as one may not exist
+            if let posterImgPath = movie["poster_path"] as? String {
+                let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
+                detailsVC.posterUrl = URL(string: posterBaseUrl + posterImgPath)
+            } else {
+                detailsVC.posterUrl = nil
+            }
+
+            detailsVC.movie = movie
+        }
     }
 
     // MARK: TODO'S

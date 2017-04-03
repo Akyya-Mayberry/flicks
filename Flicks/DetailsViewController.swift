@@ -16,15 +16,15 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var descriptionScrollView: UIScrollView!
     @IBOutlet weak var detailsScrollView: UIScrollView!
     @IBOutlet weak var infoView: UIView!
-    public var movieCell: FlickTableViewCell!
+//    public var movieCell: UICell
     public var movie: NSDictionary = [:]
     public var posterUrl: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        titleLabel.text = movieCell.titleLabel.text
-        descriptionLabel.text = movieCell.overviewLabel.text
+        titleLabel.text = movie["original_title"] as? String
+        descriptionLabel.text = movie["overview"] as? String
         descriptionLabel.sizeToFit()
         
         // Special check for poster image spec as one may not exist

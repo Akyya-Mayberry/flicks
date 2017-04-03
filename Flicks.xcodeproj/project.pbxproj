@@ -14,6 +14,7 @@
 		ABB9FB801E8EC943003EB7E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABB9FB7E1E8EC943003EB7E3 /* LaunchScreen.storyboard */; };
 		ABB9FB8A1E8EC993003EB7E3 /* FlickViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB9FB891E8EC993003EB7E3 /* FlickViewController.swift */; };
 		ABB9FB8C1E8EC9F6003EB7E3 /* FlickTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB9FB8B1E8EC9F6003EB7E3 /* FlickTableViewCell.swift */; };
+		ABDAB9AA1E91C3150011E64E /* FlickCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDAB9A91E91C3150011E64E /* FlickCollectionViewCell.swift */; };
 		CC3A1F5F8103EE45D15EF464 /* Pods_Flicks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E5372CC4DC23D70CF121CC8 /* Pods_Flicks.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 		ABB9FB811E8EC943003EB7E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABB9FB891E8EC993003EB7E3 /* FlickViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickViewController.swift; sourceTree = "<group>"; };
 		ABB9FB8B1E8EC9F6003EB7E3 /* FlickTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickTableViewCell.swift; sourceTree = "<group>"; };
+		ABDAB9A91E91C3150011E64E /* FlickCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickCollectionViewCell.swift; sourceTree = "<group>"; };
 		B98BBC5FB2714CF2811F542B /* Pods-Flicks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Flicks.release.xcconfig"; path = "Pods/Target Support Files/Pods-Flicks/Pods-Flicks.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				ABB9FB8B1E8EC9F6003EB7E3 /* FlickTableViewCell.swift */,
+				ABDAB9A91E91C3150011E64E /* FlickCollectionViewCell.swift */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 				ABB9FB8A1E8EC993003EB7E3 /* FlickViewController.swift in Sources */,
 				ABB9FB761E8EC943003EB7E3 /* AppDelegate.swift in Sources */,
 				ABB9FB8C1E8EC9F6003EB7E3 /* FlickTableViewCell.swift in Sources */,
+				ABDAB9AA1E91C3150011E64E /* FlickCollectionViewCell.swift in Sources */,
 				ABAF12CC1E8EE7E30058935E /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
