@@ -15,7 +15,6 @@ class FlickTableViewCell: UITableViewCell {
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var overviewLabel: UILabel!
     let cellBackgroundView = UIView() // Will override the default background
-    var cellSeparatorInset = UIEdgeInsets(top:1,left:5,bottom:5,right:5)
     
     override func awakeFromNib() {
         super.awakeFromNib()

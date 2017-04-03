@@ -201,18 +201,40 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         if let posterImgPath = movie["poster_path"] as? String {
             let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = URL(string: posterBaseUrl + posterImgPath)
+            let imageView = cell.posterImageView
+            
+            let imgRequest = URLRequest(url: posterUrl!)
 
-            cell.posterImageView.alpha = 0.0
-            UIView.animate(withDuration: 3.0, animations: {
-                cell.posterImageView.alpha = 1.0
+            imageView?.setImageWith(imgRequest, placeholderImage: nil, success: { (imgRequest:URLRequest, imgResponse:HTTPURLResponse?, img:UIImage) in
+                if imgResponse != nil {
+                    imageView?.image = img
+                    imageView?.alpha = 0
+
+                    UIView.animate(withDuration: 1.5, animations: {
+                        imageView?.alpha = 1.0
+                    })
+                } else {
+                    imageView?.image = img
+                    imageView?.alpha = 0.4
+                    
+                    UIView.animate(withDuration: 0.7, animations: {
+                        imageView?.alpha = 1.0
+                    })
+                }
+            }, failure: { (imgRequest:URLRequest, imagResponse:HTTPURLResponse?, img:Error) in
+                imageView?.image = nil;
             })
-            cell.posterImageView.setImageWith(posterUrl!)
+        } else {
+            // Absent poster image
+            cell.posterImageView.image = nil
         }
+        
         cell.titleLabel.text = movie_title
         cell.overviewLabel.text = overviewLabel
         cell.selectedBackgroundView = cell.cellBackgroundView
         cell.backgroundColor = UIColor(red: 49.0/255, green: 48.0/255, blue: 107.0/255, alpha: 0.4)
         cell.separatorInset.top = 10
+        
         return cell
     }
     
@@ -231,16 +253,36 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
         let movie = movies[indexPath.row]
         
         // Special check for poster image spec as one may not exist
+        let imageView = cell.posterImageView
+        
         if let posterImgPath = movie["poster_path"] as? String {
             let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = URL(string: posterBaseUrl + posterImgPath)
 
-            cell.posterImageView.alpha = 0.0
-            UIView.animate(withDuration: 3.0, animations: {
-                cell.posterImageView.alpha = 1.0
-            })
+            let imgRequest = URLRequest(url: posterUrl!)
             
-            cell.posterImageView.setImageWith(posterUrl!)
+            imageView?.setImageWith(imgRequest, placeholderImage: nil, success: { (imgRequest:URLRequest, imgResponse:HTTPURLResponse?, img:UIImage) in
+                if imgResponse != nil {
+                    imageView?.image = img
+                    imageView?.alpha = 0
+                    
+                    UIView.animate(withDuration: 1.5, animations: {
+                        imageView?.alpha = 1.0
+                    })
+                } else {
+                    imageView?.image = img
+                    imageView?.alpha = 0.4
+                    
+                    UIView.animate(withDuration: 0.7, animations: {
+                        imageView?.alpha = 1.0
+                    })
+                }
+            }, failure: { (imgRequest:URLRequest, imagResponse:HTTPURLResponse?, img:Error) in
+                imageView?.image = nil;
+            })
+        } else {
+            // Absent poster image
+            imageView?.image = nil
         }
         
         let bcolor : UIColor = UIColor( red: 0.2, green: 0.2, blue:0.2, alpha: 0.3 )
