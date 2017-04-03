@@ -32,7 +32,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://cloud.githubusercontent.com/assets/13710170/24595805/9a9a9b4a-17ee-11e7-9618-dfd3ea3b0365.gif' />
+<img src='https://cloud.githubusercontent.com/assets/13710170/24634639/d1603776-1883-11e7-8d17-50703f28b215.gif' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
