@@ -17,12 +17,12 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 - [ ] Add a tab bar for **Now Playing** and **Top Rated** movies.
-- [-] Implement segmented control to switch between list view and grid view.
+- [X] Implement segmented control to switch between list view and grid view.
 - [ ] Add a search bar.
 - [X] All images fade in.
 - [ ] For the large poster, load the low-res image first, switch to high-res when complete.
 - [X] Customize the highlight and selection effect of the cell.
-- [ ] Customize the navigation bar.
+- [X] Customize the navigation bar.
 
 The following **additional** features are implemented:
 
@@ -32,14 +32,14 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://cloud.githubusercontent.com/assets/13710170/24590186/c002066c-179d-11e7-9dde-df0b0388a579.gif' width='' alt='Video Walkthrough' />
+<img src='https://cloud.githubusercontent.com/assets/13710170/24595805/9a9a9b4a-17ee-11e7-9618-dfd3ea3b0365.gif' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
 Describe any challenges encountered while building the app.
-Getting the refresh control to work without compiler errors. I was declaring the refreshControl, the function and everything inside the viewDidLoad() which was a problematic. I found a nice YouTube tutorial that help me work through it quickly. I struggled with getting the error messages to print from requests. I later discovered nothing was printing to the console because I some how disabled the console in XCode. When adding features to refresh data and add a toggable collection view with the table view, I feel like my code got really sloppy with lots of repeated code. 
+Getting the refresh control to work without compiler errors. I was declaring the refreshControl, the function and everything inside the viewDidLoad() which was a problematic. I found a nice YouTube tutorial that help me work through it quickly. I struggled with getting the error messages to print from requests. I later discovered nothing was printing to the console because I some how disabled the console in XCode. When adding features to refresh data and add a toggable collection view with the table view, I feel like my code got really sloppy with lots of repeated code. I ran into some issues with toggling from list(table) view to grid(collections) view involving duplicate API's while building cells. Resolving that issue may have broke the fade-animation feature. 
 
 ## License
 
