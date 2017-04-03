@@ -193,13 +193,14 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
             let posterUrl = URL(string: posterBaseUrl + posterImgPath)
 
             cell.posterImageView.alpha = 0.0
-            UIView.animate(withDuration: 3.0, animations: {
+            UIView.animate(withDuration: 1.5, animations: {
                 cell.posterImageView.alpha = 1.0
             })
             cell.posterImageView.setImageWith(posterUrl!)
         }
         cell.titleLabel.text = movie_title
         cell.overviewLabel.text = overviewLabel
+        cell.selectedBackgroundView = cell.cellBackgroundView
         
         return cell
     }
@@ -224,7 +225,7 @@ class FlickViewController: UIViewController, UITableViewDataSource, UITableViewD
             let posterUrl = URL(string: posterBaseUrl + posterImgPath)
 
             cell.posterImageView.alpha = 0.0
-            UIView.animate(withDuration: 3.0, animations: {
+            UIView.animate(withDuration: 1.5, animations: {
                 cell.posterImageView.alpha = 1.0
             })
             

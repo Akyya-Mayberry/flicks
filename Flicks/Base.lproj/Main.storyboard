@@ -103,7 +103,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="157"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E4R-dK-oek" id="seB-gQ-Zg5">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="156"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="157"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" misplaced="YES" id="lAu-8X-yfX">
@@ -172,6 +172,8 @@
                                                 </view>
                                             </subviews>
                                         </view>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="posterImageView" destination="Y7E-Nt-jNL" id="T8W-NX-MsA"/>
                                             <segue destination="nxd-p8-UFa" kind="push" id="I6Z-b8-bxn"/>

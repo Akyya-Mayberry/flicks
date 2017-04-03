@@ -10,5 +10,5 @@ import UIKit
 
 class FlickCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var posterImageView: UIImageView!
-    
+    @IBOutlet weak var movieTitleLabel: UILabel!
 }
